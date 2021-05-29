@@ -45,6 +45,7 @@ export class CourseDialogComponent implements AfterViewInit, OnInit {
             .pipe(
                 filter(() => this.form.valid),
                 concatMap(changes => this.saveCourse(changes))
+                //concat is about completition, it waits for one observable to complete before subscribing and using the next observable
             )
             .subscribe()
     }

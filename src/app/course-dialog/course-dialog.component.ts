@@ -43,37 +43,31 @@ export class CourseDialogComponent implements AfterViewInit, OnInit {
     ngOnInit() {
         this.form.valueChanges
             .pipe(
-                filter(() => this.form.valid)
+                filter(() => this.form.valid),
+                concatMap(changes => this.saveCourse(changes))
             )
-            .subscribe(changes => {
-                const saveCourse$ = fromPromise(fetch(`/api/courses/${this.course.id}`, {
-                    method: 'PUT',
-                    body: JSON.stringify(changes),
-                    headers: {
-                        'content-type': 'application/json;'
-                    }
-                }))
-
-                saveCourse$.subscribe()
-                //combined two streams by nesting multiple subscriptions calls, something to avoid
-                //multiple request are send 
-
-            })
+            .subscribe()
     }
 
-    ngAfterViewInit() {
+    ngAfterViewInit() { }
 
+    // save() {
+    //     this.store.saveCourse(this.course.id, this.form.value)
+    //         .subscribe(
+    //             () => this.close(),
+    //             err => console.log("Error saving course", err)
+    //         );
+    // }
+
+    saveCourse(changes) {
+        return fromPromise(fetch(`/api/courses/${this.course.id}`, {
+            method: 'PUT',
+            body: JSON.stringify(changes),
+            headers: {
+                'content-type': 'application/json;'
+            }
+        }))
     }
-
-    save() {
-        this.store.saveCourse(this.course.id, this.form.value)
-            .subscribe(
-                () => this.close(),
-                err => console.log("Error saving course", err)
-            );
-    }
-
-
 
 
     close() {

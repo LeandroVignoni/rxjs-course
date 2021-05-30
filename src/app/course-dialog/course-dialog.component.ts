@@ -45,12 +45,18 @@ export class CourseDialogComponent implements AfterViewInit, OnInit {
             .pipe(
                 filter(() => this.form.valid),
                 concatMap(changes => this.saveCourse(changes))
-                //concat is about completition, it waits for one observable to complete before subscribing and using the next observable
-            )
+                //concatMap is about completition, it waits for one observable to complete before subscribing and using the next observable
+                )
             .subscribe()
     }
 
-    ngAfterViewInit() { }
+    ngAfterViewInit() {
+        fromEvent(this.saveButton.nativeElement, 'click')
+            .pipe(
+                exhaustMap(() => this.saveCourse(this.form.value))
+            )
+            .subscribe()
+    }
 
     // save() {
     //     this.store.saveCourse(this.course.id, this.form.value)

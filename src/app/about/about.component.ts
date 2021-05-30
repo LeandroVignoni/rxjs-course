@@ -1,4 +1,4 @@
-import { noop, Observable } from 'rxjs';
+import { concat, noop, Observable, of, interval } from 'rxjs';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { createHttpObservable } from "../common/util"
 import { map } from 'rxjs/operators';
@@ -13,19 +13,10 @@ export class AboutComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
-        // const http$ = createHttpObservable("/api/courses")
+        const http$ = createHttpObservable("/api/courses")
+        const subscription = http$.subscribe(console.log)
 
-        // const courses$ = http$
-        //     .pipe(
-        //         map(res => Object.values(res["payload"]))
-        //     )
-
-        // courses$.subscribe(
-        //     courses => console.log(courses),
-        //     noop,
-        //     () => console.log("completed")
-        // )
-
+        setTimeout(() => subscription.unsubscribe(), 0)
     }
 
 }
